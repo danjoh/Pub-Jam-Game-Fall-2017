@@ -13,7 +13,8 @@ public class GameController : MonoBehaviour {
 	void Start () {
         // Find objects at the start of runtime to make the game run smoother
         panels = GameObject.FindGameObjectsWithTag("Panel");
-	}
+        DisablePanels();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -44,19 +45,25 @@ public class GameController : MonoBehaviour {
         else
         {
             // Disable any active panels
-            // This has to be done before the parent canvas is disabled
-            foreach (GameObject panel in panels)
-            {
-                if (panel.gameObject.activeInHierarchy == true)
-                {
-                    panel.gameObject.SetActive(false);
-                }
-            }
-            canvas.gameObject.SetActive(false);
+            DisablePanels();
             // Time scale of the scene is unfrozen
             Time.timeScale = 1;
             // Player controller is enabled
             // player.GetComponent<appropriate type>().enabled = true;
         }
+    }
+
+    // Disables all the panels in the scene
+    private void DisablePanels()
+    {
+        // This has to be done before the parent canvas is disabled
+        foreach (GameObject panel in panels)
+        {
+            if (panel.gameObject.activeInHierarchy == true)
+            {
+                panel.gameObject.SetActive(false);
+            }
+        }
+        canvas.gameObject.SetActive(false);
     }
 }
