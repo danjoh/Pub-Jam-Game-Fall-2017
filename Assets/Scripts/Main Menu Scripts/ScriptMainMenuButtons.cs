@@ -18,7 +18,7 @@ public class ScriptMainMenuButtons : MonoBehaviour {
     // Loads the next game scene
     public void OnPressStartButton()
     {
-        SceneManager.LoadScene("Scene Next", LoadSceneMode.Additive);
+        SceneManager.LoadScene("SceneNext", LoadSceneMode.Single);
     }
 
     // Quits the application
