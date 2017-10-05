@@ -28,7 +28,7 @@ public class ScriptPauseMenu : MonoBehaviour {
         // Time scale of the scene is unfrozen
         Time.timeScale = 1;
         // Player controller is enabled
-        // player.GetComponent<appropriate type>().enabled = true;
+        // player.GetComponent<GameObject>().enabled = true;
     }
 
     // Brings up the options menu
