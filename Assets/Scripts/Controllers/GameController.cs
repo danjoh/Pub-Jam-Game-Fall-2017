@@ -12,8 +12,10 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         // Find objects at the start of runtime to make the game run smoother
+        canvas.gameObject.SetActive(true);
         panels = GameObject.FindGameObjectsWithTag("Panel");
         DisablePanels();
+        canvas.gameObject.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -46,6 +48,7 @@ public class GameController : MonoBehaviour {
         {
             // Disable any active panels
             DisablePanels();
+            canvas.gameObject.SetActive(false);
             // Time scale of the scene is unfrozen
             Time.timeScale = 1;
             // Player controller is enabled
@@ -64,6 +67,5 @@ public class GameController : MonoBehaviour {
                 panel.gameObject.SetActive(false);
             }
         }
-        canvas.gameObject.SetActive(false);
     }
 }
