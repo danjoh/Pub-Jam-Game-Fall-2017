@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    public float moveSpeed = 10;
-    public float jumpSpeed = 10;
+    public float moveSpeed = 8;
+    public float jumpSpeed = 20;
     public bool canMoveLeft;
     public bool canMoveRight;
     public bool canJump;
     public bool canDoubleJump;
 
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
 
 	// Use this for initialization
 	void Start () {
@@ -54,6 +54,5 @@ public class PlayerController : MonoBehaviour {
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
             if (!canJump) canDoubleJump = false;
         }
-        Debug.Log("Can Move Right? " + canMoveRight.ToString() + "  X: " + rb.velocity.x + "   y:" + rb.velocity.y);
     }
 }
