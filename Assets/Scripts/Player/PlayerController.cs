@@ -9,14 +9,17 @@ public class PlayerController : MonoBehaviour {
     public bool canMoveRight;
     public bool canJump;
     public bool canDoubleJump;
-
+    public string currentMagic;
     public Rigidbody2D rb;
+    public string nextSpell;
 
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         canMoveRight = true;
         canMoveLeft = true;
+        currentMagic = "";
+        nextSpell = "";
 	}
     
     // Update is called once per frame
@@ -51,6 +54,15 @@ public class PlayerController : MonoBehaviour {
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
             if (!canJump) canDoubleJump = false;
+        }
+
+        //DO MAGICS
+        if (Input.GetMouseButtonDown(1) && currentMagic.Length > 0) {
+            nextSpell = currentMagic;
+        }
+        if (Input.GetMouseButtonDown(0) && nextSpell.Length > 0)
+        {
+            nextSpell = "";
         }
     }
 }

@@ -13,9 +13,12 @@ public class Spikes : MonoBehaviour {
         pc = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
-    void OnTriggerEnter2D()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        pc.rb.position = spawnLoc.transform.position;
-        Debug.Log("DO STUFF!!!!");
+
+        if (pc.GetComponent<Collider2D>().Equals(other)) {
+            pc.rb.position = spawnLoc.transform.position;
+            Debug.Log("DO STUFF!!!!");
+        }
     }
 }
