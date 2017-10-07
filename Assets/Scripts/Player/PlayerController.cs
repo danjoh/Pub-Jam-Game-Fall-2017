@@ -21,8 +21,6 @@ public class PlayerController : MonoBehaviour {
     
     // Update is called once per frame
     void Update () {
-
-
         if (Input.GetKey(KeyCode.A) && canMoveLeft)
         {
             rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);
