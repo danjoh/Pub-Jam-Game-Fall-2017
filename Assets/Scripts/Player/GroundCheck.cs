@@ -9,8 +9,8 @@ public class GroundCheck : MonoBehaviour {
 	void Start () {
         pm = GetComponentInParent<PlayerController>();
 	}
-	
-	void OnTriggerEnter2D () {
+
+    void OnTriggerEnter2D () {
         pm.canJump = true;
         pm.canDoubleJump = true;
 	}
