@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour {
     public string currentMagic;
     public Rigidbody2D rb;
     public string nextSpell;
+    GameObject magicGameObject;
+    Sprite water, fire, earth, air, lightSprite, dark, life, death;
+    SpriteRenderer magicSpriteRenderer;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +23,14 @@ public class PlayerController : MonoBehaviour {
         canMoveLeft = true;
         currentMagic = "";
         nextSpell = "";
+        magicGameObject = GameObject.Find("MagicPrepped");
+        water = Resources.Load("Water", typeof(Sprite)) as Sprite;
+        fire = Resources.Load("Fire", typeof(Sprite)) as Sprite;
+        earth = Resources.Load("Earth", typeof(Sprite)) as Sprite;
+        air = Resources.Load("Air", typeof(Sprite)) as Sprite;
+        life = Resources.Load("Life", typeof(Sprite)) as Sprite;
+        death = Resources.Load("Death", typeof(Sprite)) as Sprite;
+        magicSpriteRenderer = magicGameObject.GetComponent<SpriteRenderer>();
 	}
     
     // Update is called once per frame
@@ -59,10 +70,24 @@ public class PlayerController : MonoBehaviour {
         //DO MAGICS
         if (Input.GetMouseButtonDown(1) && currentMagic.Length > 0) {
             nextSpell = currentMagic;
+            Debug.Log(nextSpell);
+            if (nextSpell == "water")
+                magicSpriteRenderer.sprite = water;
+            else if (nextSpell == "fire")
+                magicSpriteRenderer.sprite = fire;
+            else if (nextSpell == "earth")
+                magicSpriteRenderer.sprite = earth;
+            else if (nextSpell == "air")
+                magicSpriteRenderer.sprite = air;
+            else if (nextSpell == "life")
+                magicSpriteRenderer.sprite = life;
+            else if (nextSpell == "death")
+                magicSpriteRenderer.sprite = death;
         }
         if (Input.GetMouseButtonDown(0) && nextSpell.Length > 0)
         {
             nextSpell = "";
+            magicSpriteRenderer.sprite = null;
         }
     }
 }
