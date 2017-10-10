@@ -115,7 +115,6 @@ public class PlayerController : MonoBehaviour {
         {
             castSpell();
             nextSpell = "";
-            magicSpriteRenderer.sprite = null;
         }
 
         for (int i = 0; i < activeSpells.Count; i++)
