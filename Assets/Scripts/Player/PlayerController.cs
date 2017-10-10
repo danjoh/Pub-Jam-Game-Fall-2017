@@ -110,6 +110,10 @@ public class PlayerController : MonoBehaviour {
                 magicSpriteRenderer.sprite = life;
             else if (nextSpell == "death")
                 magicSpriteRenderer.sprite = death;
+            else if (nextSpell == "light")
+                magicSpriteRenderer.sprite = null;
+            else if (nextSpell == "dark")
+                magicSpriteRenderer.sprite = null;
         }
         if (Input.GetMouseButtonDown(0) && nextSpell.Length > 0)
         {
