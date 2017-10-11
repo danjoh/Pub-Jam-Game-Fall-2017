@@ -18,7 +18,7 @@ public class Projectile : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!pc.GetComponent<Collider2D>().Equals(other) && !gc.Equals(other.GetComponentInParent<Collider2D>()))
+        if (other.name != "MagicHand" && other.name != "Player" && other.name != "GroundCheck")
         {
             removeMe = true;
         }

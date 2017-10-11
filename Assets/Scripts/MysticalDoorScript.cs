@@ -3,28 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MysticalDoorScript : MonoBehaviour {
-    public bool trigger1, trigger2, trigger3, trigger4;
-
+    public int count;
+    BoxCollider2D bc;
+    Rigidbody2D rb;
 	// Use this for initialization
 	void Start () {
-        trigger1 = false;
-        trigger2 = false;
-        trigger3 = false;
-        trigger4 = false;
+        count = 0;
+        bc = this.GetComponent<BoxCollider2D>();
+        rb = this.GetComponent<Rigidbody2D>();
     }
 
-    void CheckTriggers()
+    private void Update()
     {
-        if(trigger1 == true && trigger2 == true && trigger3 == true && trigger4 == true)
-        {
-            if(this.transform.position.y >= 200)
+        if (count > 2) {
+            if (this.transform.position.y >= 200)
             {
-                gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-                gameObject.SetActive(false);
-            }
-            else
+                rb.velocity = new Vector2(0, 0);
+                this.gameObject.SetActive(false);
+            } else
             {
-                gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 5.0f);
+                bc.enabled = false;
+                rb.velocity = new Vector2(0, 4.0f);
             }
         }
     }

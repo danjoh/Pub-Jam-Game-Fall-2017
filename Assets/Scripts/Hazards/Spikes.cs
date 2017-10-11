@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Spikes : MonoBehaviour {
 
@@ -17,8 +18,7 @@ public class Spikes : MonoBehaviour {
     {
 
         if (pc.GetComponent<Collider2D>().Equals(other)) {
-            pc.rb.position = spawnLoc.transform.position;
-            Debug.Log("DO STUFF!!!!");
+            SceneManager.LoadScene("SceneNext", LoadSceneMode.Single);
         }
     }
 }

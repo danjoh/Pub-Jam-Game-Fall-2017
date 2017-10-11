@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
     public float moveSpeed = 8;
@@ -9,6 +10,16 @@ public class PlayerController : MonoBehaviour {
     public bool canMoveRight;
     public bool canJump;
     public bool canDoubleJump;
+    Animator anim;
+    public int health = 3;
+
+    public float knockback;
+    public float knockbackLength;
+    public float knockbackCount;
+    public bool knockFromRight;
+    public float immunityLength;
+    public float immunityCount;
+
     public string currentMagic;
     public Rigidbody2D rb;
     public string nextSpell;
@@ -20,6 +31,12 @@ public class PlayerController : MonoBehaviour {
 
     public GameObject firePrefab;
     public GameObject waterPrefab;
+    public GameObject earthPrefab;
+    public GameObject airPrefab;
+    public GameObject lifePrefab;
+    public GameObject deathPrefab;
+    public GameObject lightPrefab;
+    public GameObject darkPrefab;
 
     // Use this for initialization
     void Start () {
@@ -29,6 +46,7 @@ public class PlayerController : MonoBehaviour {
         currentMagic = "";
         nextSpell = "";
         magicGameObject = GameObject.Find("MagicPrepped");
+        anim = this.gameObject.GetComponentInChildren<Animator>();
         water = Resources.Load("Water", typeof(Sprite)) as Sprite;
         fire = Resources.Load("Fire", typeof(Sprite)) as Sprite;
         earth = Resources.Load("Earth", typeof(Sprite)) as Sprite;
@@ -37,6 +55,28 @@ public class PlayerController : MonoBehaviour {
         death = Resources.Load("Death", typeof(Sprite)) as Sprite;
         magicSpriteRenderer = magicGameObject.GetComponent<SpriteRenderer>();
 	}
+
+    public PlayerController KnockBack(bool fromRight)
+    {
+        if (immunityCount <= 0)
+        {
+            knockFromRight = fromRight;
+            knockbackCount = knockbackLength;
+            rb.velocity = new Vector2(0, 0);
+        }
+        return this;
+    }
+
+    public PlayerController HurtPlayer(int damage)
+    {
+        if (immunityCount <= 0)
+        {
+            immunityCount = immunityLength;
+            health -= damage;
+        }
+        return this;
+    }
+
     void castSpell ()
     {
         Camera camera = Camera.main;
@@ -55,49 +95,132 @@ public class PlayerController : MonoBehaviour {
         {
             spell = (GameObject)Instantiate(waterPrefab, transform.position, Quaternion.identity);
             Projectile projectileCtrl = spell.GetComponent<Projectile>();
-            projectileCtrl.velocity = 5;
+            projectileCtrl.velocity = 8;
+            projectileCtrl.direction = p;
+        }
+        if (nextSpell == "air")
+        {
+            spell = (GameObject)Instantiate(airPrefab, transform.position, Quaternion.identity);
+            Projectile projectileCtrl = spell.GetComponent<Projectile>();
+            projectileCtrl.velocity = 15;
+            projectileCtrl.direction = p;
+        }
+        if (nextSpell == "earth")
+        {
+            spell = (GameObject)Instantiate(earthPrefab, transform.position, Quaternion.identity);
+            Projectile projectileCtrl = spell.GetComponent<Projectile>();
+            projectileCtrl.velocity = 6;
+            projectileCtrl.direction = p;
+        }
+        if (nextSpell == "light")
+        {
+            spell = (GameObject)Instantiate(lightPrefab, transform.position, Quaternion.identity);
+            Projectile projectileCtrl = spell.GetComponent<Projectile>();
+            projectileCtrl.velocity = 6;
+            projectileCtrl.direction = p;
+        }
+        if (nextSpell == "dark")
+        {
+            spell = (GameObject)Instantiate(darkPrefab, transform.position, Quaternion.identity);
+            Projectile projectileCtrl = spell.GetComponent<Projectile>();
+            projectileCtrl.velocity = 6;
+            projectileCtrl.direction = p;
+        }
+        if (nextSpell == "life")
+        {
+            spell = (GameObject)Instantiate(lifePrefab, transform.position, Quaternion.identity);
+            Projectile projectileCtrl = spell.GetComponent<Projectile>();
+            projectileCtrl.velocity = 6;
+            projectileCtrl.direction = p;
+        }
+        if (nextSpell == "death")
+        {
+            spell = (GameObject)Instantiate(deathPrefab, transform.position, Quaternion.identity);
+            Projectile projectileCtrl = spell.GetComponent<Projectile>();
+            projectileCtrl.velocity = 6;
             projectileCtrl.direction = p;
         }
         if (spell != null) activeSpells.Add(spell);
     }
     // Update is called once per frame
-    void Update () {
-        if (Input.GetKey(KeyCode.A) && canMoveLeft)
+    void Update ()
+    {   
+        if(health <= 0)
+            SceneManager.LoadScene("SceneNext", LoadSceneMode.Single);
+        // Is the player knocked back?
+        if (knockbackCount <= 0)
         {
-            rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);
+            if (Input.GetKey(KeyCode.A) && canMoveLeft)
+            {
+                if (!anim.GetBool("runningLeft")) {
+                    anim.SetBool("runningRight", false);
+                    anim.SetBool("runningLeft", true);
+                }
+                rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);
+            }
+            else if (Input.GetKey(KeyCode.A) && !canMoveLeft)
+            {
+                anim.SetBool("runningLeft", false);
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+            if (Input.GetKeyUp(KeyCode.A))
+            {
+                anim.SetBool("runningLeft", false);
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+
+            if (Input.GetKey(KeyCode.D) && canMoveRight)
+            {
+                if (!anim.GetBool("runningRight"))
+                {
+                    anim.SetBool("runningLeft", false);
+                    anim.SetBool("runningRight", true);
+                }
+                rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+            }
+            else if (Input.GetKey(KeyCode.D) && !canMoveRight)
+            {
+                anim.SetBool("runningRight", false);
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+
+            if (Input.GetKeyUp(KeyCode.D))
+            {
+                anim.SetBool("runningRight", false);
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+
+            if (Input.GetKeyDown(KeyCode.W) && (canJump || canDoubleJump))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+                if (!canJump) canDoubleJump = false;
+            }
         }
-        else if (Input.GetKey(KeyCode.A) && !canMoveLeft)
+        else
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        }
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            /*if (knockFromRight)
+            {
+                rb.AddForce(new Vector2(-knockback / 2, knockback * 2.5f), ForceMode2D.Impulse);
+            } else
+            {
+                rb.AddForce(new Vector2(knockback / 2, knockback * 2.5f), ForceMode2D.Impulse);
+            }*/
+            if (knockFromRight)
+            {
+                rb.velocity = new Vector2(-knockback * (knockbackCount / knockbackLength), (knockbackCount < knockbackLength / 2 ? -1 : 1) * (knockback / 2) * (knockbackCount / knockbackLength));
+            }
+            else
+            {
+                rb.velocity = new Vector2(knockback * (knockbackCount/knockbackLength), (knockbackCount < knockbackLength / 2 ? -1 : 1) * (knockback / 2) * (knockbackCount / knockbackLength));
+            }
+            knockbackCount -= Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.D) && canMoveRight)
-        {
-            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
-        } else if (Input.GetKey(KeyCode.D) && !canMoveRight)
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        }
-
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        }
-
-        if (Input.GetKeyDown(KeyCode.W) && (canJump ||canDoubleJump))
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-            if (!canJump) canDoubleJump = false;
-        }
+        if (immunityCount > 0) immunityCount -= Time.deltaTime;
 
         //DO MAGICS
         if (Input.GetMouseButtonDown(1) && currentMagic.Length > 0) {
             nextSpell = currentMagic;
-            Debug.Log(nextSpell);
             if (nextSpell == "water")
                 magicSpriteRenderer.sprite = water;
             else if (nextSpell == "fire")
