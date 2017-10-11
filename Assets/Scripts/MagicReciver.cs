@@ -19,7 +19,6 @@ public class MagicReciver : MonoBehaviour {
         
         if (mag != null && mag.magicType == type) {
             mdsCtrl.count++;
-            Debug.Log(mdsCtrl.count);
             source.SetActive(true);
             DestroyObject(this);
         }

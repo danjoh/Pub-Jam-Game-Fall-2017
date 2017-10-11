@@ -18,7 +18,7 @@ public class Spikes : MonoBehaviour {
     {
 
         if (pc.GetComponent<Collider2D>().Equals(other)) {
-            SceneManager.LoadScene("SceneNext", LoadSceneMode.Single);
+            SceneManager.LoadScene("GameOverScreen", LoadSceneMode.Single);
         }
     }
 }

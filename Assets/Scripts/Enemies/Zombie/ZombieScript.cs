@@ -24,8 +24,20 @@ public class ZombieScript : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.name);
         if (collision.name == "GroundCheck" || collision.name == "Player") {
+            pCtrl.KnockBack(goingLeft).HurtPlayer(1);
+            currentSpeed = movementSpeed;
+        }
+        else if(collision.tag == "Spells")
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.name == "Player" && pCtrl.immunityCount <= 0)
+        {
             pCtrl.KnockBack(goingLeft).HurtPlayer(1);
             currentSpeed = movementSpeed;
         }
@@ -54,6 +66,5 @@ public class ZombieScript : MonoBehaviour {
             currentSpeed = movementSpeed;
             rb.velocity = new Vector3(0, rb.velocity.y);
         }
-        
-	}
+    }
 }

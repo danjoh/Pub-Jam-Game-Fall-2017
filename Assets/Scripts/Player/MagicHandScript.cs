@@ -24,13 +24,6 @@ public class MagicHandScript : MonoBehaviour {
         float posY = Mathf.SmoothDamp(transform.position.y, p.y, ref velocity.y, smoothTimeY);
 
         transform.position = new Vector3(posX, posY, camera.nearClipPlane);
-
-        GUILayout.BeginArea(new Rect(20, 20, 250, 150));
-        GUILayout.Label("Screen pixels: " + camera.pixelWidth + ":" + camera.pixelHeight);
-        GUILayout.Label("Mouse position: " + mousePos);
-        GUILayout.Label("World position: " + p.ToString("F3"));
-        GUILayout.Label("Hand position: " + transform.position);
-        GUILayout.EndArea();
     }
 
 }

@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour {
         air = Resources.Load("Air", typeof(Sprite)) as Sprite;
         life = Resources.Load("Life", typeof(Sprite)) as Sprite;
         death = Resources.Load("Death", typeof(Sprite)) as Sprite;
+        lightSprite = Resources.Load("Light", typeof(Sprite)) as Sprite;
+        dark = Resources.Load("Dark", typeof(Sprite)) as Sprite;
         magicSpriteRenderer = magicGameObject.GetComponent<SpriteRenderer>();
 	}
 
@@ -146,10 +148,18 @@ public class PlayerController : MonoBehaviour {
     void Update ()
     {   
         if(health <= 0)
-            SceneManager.LoadScene("SceneNext", LoadSceneMode.Single);
+            SceneManager.LoadScene("GameOverScreen", LoadSceneMode.Single);
         // Is the player knocked back?
         if (knockbackCount <= 0)
         {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                if (gameObject.transform.rotation.y == 0)
+                {
+                    gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
+                }
+            }
+
             if (Input.GetKey(KeyCode.A) && canMoveLeft)
             {
                 if (!anim.GetBool("runningLeft")) {
@@ -167,6 +177,14 @@ public class PlayerController : MonoBehaviour {
             {
                 anim.SetBool("runningLeft", false);
                 rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                if(gameObject.transform.rotation.y != 0)
+                {
+                    gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
             }
 
             if (Input.GetKey(KeyCode.D) && canMoveRight)
@@ -234,9 +252,9 @@ public class PlayerController : MonoBehaviour {
             else if (nextSpell == "death")
                 magicSpriteRenderer.sprite = death;
             else if (nextSpell == "light")
-                magicSpriteRenderer.sprite = null;
+                magicSpriteRenderer.sprite = lightSprite;
             else if (nextSpell == "dark")
-                magicSpriteRenderer.sprite = null;
+                magicSpriteRenderer.sprite = dark;
         }
         if (Input.GetMouseButtonDown(0) && nextSpell.Length > 0)
         {

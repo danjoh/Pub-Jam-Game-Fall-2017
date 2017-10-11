@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Panel
   - Player interface
+  - Spells
   layers:
   - Default
   - TransparentFX
@@ -20,8 +21,8 @@ TagManager:
   - Spells
   - Enemy
   - MagicHand
-  - 
-  - 
+  - SpellTarget
+  - EndGame
   - 
   - 
   - 
